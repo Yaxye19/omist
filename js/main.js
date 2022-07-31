@@ -29,12 +29,43 @@ function ready(){
     var button = removeCartButtons[i]
     button.addEventListener("click", removeCartItem);
   }
+  // Quantity Changes
+  var quantityInputs = document.getElementsByClassName("cart-qauntity");
+  for (var i = 0; i < quantityInputs.length; i++) {
+    var input = quantityInputs[i];
+    input.addEventListener("change", quantityChanged);
+  }
 }
 
 // Remove Items from cart
 function removeCartItem(event){
-  var buttonClicked = event.target
+  var buttonClicked = event.target;
   buttonClicked.parentElement.remove();
+  updatetotal();
 }
 
-// Update total
+// Quantity Changes
+function quantityChanged(event) {
+  var input = event.target;
+  if (isNaN(input.value) || input.value <= 0) {
+    input.value = 1;
+  }
+  updatetotal();
+}
+
+// Update Total
+function updatetotal(){
+  var cartContent = document.getElementsByClassName("cart-content")[0];
+  var cartBoxes = cartContent.getElementsByClassName("cart-box");
+  var total = 0;
+  for (var i = 0; i < cartBoxes.length; i++) {
+    var cartBox = cartBoxes[i];
+    var priceElement = cartBox.getElementsByClassName("cart-price")[0];
+    var quantityElement = cartBox.getElementsByClassName("cart-qauntity")[0];
+    var price = parseFloat(priceElement.innerText.replace("£", ""));
+    var quantity = quantityElement.value;
+    total = total + price * quantity;
+
+    document.getElementsByClassName("total-price")[0].innerText = "£" + total;
+  }
+}
