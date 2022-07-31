@@ -35,6 +35,12 @@ function ready(){
     var input = quantityInputs[i];
     input.addEventListener("change", quantityChanged);
   }
+  // Add to cart
+  var addCart = document.getElementsByClassName("add-cart");
+  for (var i = 0; i < addCart.length; i++) {
+    var button = addCart[i];
+    button.addEventListener("click", addCartClicked);
+  }
 }
 
 // Remove Items from cart
@@ -53,6 +59,15 @@ function quantityChanged(event) {
   updatetotal();
 }
 
+// Add to cart
+function addCartClicked(event){
+  var button = event.target;
+  var shopProducts = button.parentElement;
+  var title = shopProducts.getElementsByClassName("product-title")[0].innerText;
+  var price = shopProducts.getElementsByClassName("price")[0].innerText;
+  console.log(title, price);
+}
+
 // Update Total
 function updatetotal(){
   var cartContent = document.getElementsByClassName("cart-content")[0];
@@ -65,6 +80,8 @@ function updatetotal(){
     var price = parseFloat(priceElement.innerText.replace("£", ""));
     var quantity = quantityElement.value;
     total = total + price * quantity;
+    // If price contains some pence value
+    total = Math.round(total * 100) / 100;
 
     document.getElementsByClassName("total-price")[0].innerText = "£" + total;
   }
